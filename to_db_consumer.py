@@ -80,17 +80,14 @@ def csv_writer_to_database(table_name, file_path):
     """
     with open(file_path, 'r') as csv_f:
         data = csv.DictReader(csv_f)
-        try:
-            to_db = [(i['InvoiceId'], i['CustomerId'], i['InvoiceDate'], i['BillingAddress'],
-                  i['BillingCity'], i['BillingState'], i['BillingCountry'], i['BillingPostalCode'],
-                  i['Total']) for i in data]
-            commend = f"""INSERT INTO {table_name} VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);"""
+      
+        to_db = [(i['InvoiceId'], i['CustomerId'], i['InvoiceDate'], i['BillingAddress'],
+              i['BillingCity'], i['BillingState'], i['BillingCountry'], i['BillingPostalCode'],
+              i['Total']) for i in data]
+        commend = f"""INSERT INTO {table_name} VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);"""
 
-            c.executemany(commend, to_db)
-            conn.commit()
-
-        except KeyError:
-            pass
+        c.executemany(commend, to_db)
+        conn.commit()
 
 
 def create_table(table_name):
@@ -100,16 +97,13 @@ def create_table(table_name):
     :return: None
 
     """
-    try:
-        commend = f"""CREATE TABLE IF NOT EXISTS {table_name} (
-                        InvoiceId, CustomerId, InvoiceDate, BillingAddress,
-                        BillingCity, BillingState, BillingCountry, BillingPostalCode,
-                        Total);"""
-        c.execute(commend)
-    except sqlite3.OperationalError:
-        pass
+    commend = f"""CREATE TABLE IF NOT EXISTS {table_name} (
+                    InvoiceId, CustomerId, InvoiceDate, BillingAddress,
+                    BillingCity, BillingState, BillingCountry, BillingPostalCode,
+                    Total);"""
+    c.execute(commend)
 
-
+        
 def callback(*args):
     """
     Call format_message(), create_table(), ops_func_by_ext() and done_message()
